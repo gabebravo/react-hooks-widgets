@@ -3976,6 +3976,13 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
+fetch-suspense@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/fetch-suspense/-/fetch-suspense-1.0.2.tgz#c031d9560bdd805a9b07c1ed7b06eceea8114b77"
+  integrity sha512-fJMHCRpmuZez9O/7bkepDPapdaO0OZKizh4Z+Pk8dMmVHDy7nPvyvA1ZW9OzKZ/xCeaY4uTApFuw4uVPg3w31g==
+  dependencies:
+    deep-equal "^1.0.1"
+
 figgy-pudding@^3.1.0, figgy-pudding@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/figgy-pudding/-/figgy-pudding-3.5.1.tgz#862470112901c727a0e495a80744bd5baa1d6790"
@@ -8153,7 +8160,7 @@ react-dev-utils@^7.0.3:
     strip-ansi "5.0.0"
     text-table "0.2.0"
 
-react-dom@16.8.4:
+react-dom@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.4.tgz#1061a8e01a2b3b0c8160037441c3bf00a0e3bc48"
   integrity sha512-Ob2wK7XG2tUDt7ps7LtLzGYYB6DXMCLj0G5fO6WeEICtT4/HdpOi7W/xLzZnR6RCG1tYza60nMdqtxzA8FaPJQ==
@@ -8223,7 +8230,7 @@ react-scripts@2.1.5:
   optionalDependencies:
     fsevents "1.2.4"
 
-react@16.8.4:
+react@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
   integrity sha512-0GQ6gFXfUH7aZcjGVymlPOASTuSjlQL4ZtVC5YKH+3JL6bBLCVO21DknzmaPlI90LN253ojj02nsapy+j7wIjg==

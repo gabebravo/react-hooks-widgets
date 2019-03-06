@@ -1,4 +1,15 @@
-import React, { useState } from "react";
+import React, { Fragment, Suspense, useState } from "react";
+import useFetch from 'fetch-suspense';
+
+function FetchJoke(){
+  const data = useFetch('https://official-joke-api.appspot.com/jokes/random', { method: 'GET' })
+  return (
+    <Fragment>
+      <div>{data.setup}</div>
+      <div>{data.punchline}</div>
+    </Fragment>
+  );
+};
 
 function App() {
   const [ state, setState ] = useState({ query: '' })
@@ -12,13 +23,16 @@ function App() {
       searchQuery();
     }
   }
-  
+
   return (
     <div className="App">
       <h1>Hello Gabe</h1>
       <div className="form">
         <input value={state.query} onChange={(e) => setState({ ...state, query: e.target.value })} onKeyPress={handleKeyPress}/>
         <button onClick={searchQuery}>Search</button>
+        <Suspense fallback="Loading...">
+          <FetchJoke />
+        </Suspense>
       </div>
     </div>
   );
