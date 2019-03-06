@@ -1,13 +1,8 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
+import { useFetch } from '../customHooks';
 
 export default function HackerNews() {
-  const [state, setState] = useState({ news: [] });
-
-  useEffect(() => {
-    fetch("https://news-proxy-server.appspot.com/topstories")
-      .then(res => res.json())
-      .then(json => setState({ ...state, news: json }));
-  }, []);
+  const stories = useFetch('https://news-proxy-server.appspot.com/topstories', []);
 
   const Article = ({ by, time, title, url }) => (
     <div className="Stories">
@@ -18,14 +13,14 @@ export default function HackerNews() {
     </div>
   );
 
-  const RenderNews = () => (
+  const RenderNews = ({ stories }) => (
     <Fragment>
       <h3>Stories</h3>
-      {state.news.map((article, index) => (
+      {stories.map( article => (
         <Article key={article.id} {...article} />
       ))}
     </Fragment>
   );
 
-  return state.news.length > 0 ? <RenderNews /> : <div>Loading...</div>;
+  return stories ? <RenderNews stories={stories} /> : <div>Loading...</div>;
 }
