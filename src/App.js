@@ -1,18 +1,8 @@
-import React, { Fragment, Suspense, useState } from "react";
-import useFetch from 'fetch-suspense';
-
-function FetchJoke(){
-  const data = useFetch('https://official-joke-api.appspot.com/jokes/random', { method: 'GET' })
-  return (
-    <Fragment>
-      <div>{data.setup}</div>
-      <div>{data.punchline}</div>
-    </Fragment>
-  );
-};
+import React, { useState } from "react";
+import Joke from './components/Joke';
 
 function App() {
-  const [ state, setState ] = useState({ query: '' })
+  const [ state, setState ] = useState({ query: '', joke: {} })
 
   function searchQuery() {
     window.open(`https://google.com/search?q=${state.query}`, '_blank')
@@ -30,12 +20,12 @@ function App() {
       <div className="form">
         <input value={state.query} onChange={(e) => setState({ ...state, query: e.target.value })} onKeyPress={handleKeyPress}/>
         <button onClick={searchQuery}>Search</button>
-        <Suspense fallback="Loading...">
-          <FetchJoke />
-        </Suspense>
       </div>
+      <hr />
+      <Joke />
     </div>
   );
 }
 
 export default App;
+
