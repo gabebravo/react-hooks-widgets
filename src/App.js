@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Joke from "./components/Joke";
 import HackerNews from "./components/HackerNews";
+import Tasks from "./components/Tasks";
 
 function App() {
   const [state, setState] = useState({ query: "", joke: {} });
@@ -28,6 +29,8 @@ function App() {
       </div>
       <hr />
       <Joke />
+      <hr />
+      <Tasks />
       <hr />
       <HackerNews />
     </div>
