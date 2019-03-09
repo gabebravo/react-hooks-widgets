@@ -1,10 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 const shortid = require("shortid");
+
+const TASK_STORAGE_KEY = "TASK_STORAGE_KEY";
+
+const storeTasks = (taskMap) => {
+  localStorage.setItem(
+    TASK_STORAGE_KEY,
+    JSON.stringify(taskMap)
+  );
+};
+
+const readStoreTasks = () => {
+  const taskMap = JSON.parse(localStorage.getItem("TASK_STORAGE_KEY"));
+  return taskMap ? taskMap : { tasks: [], completedTasks: [] }
+};
 
 export default function Tasks() {
   const [taskText, setTaskText] = useState("");
-  const [tasks, setTasks] = useState([]);
-  const [completedTasks, setCompletedText] = useState([]);
+  const storedTasks = readStoreTasks();
+  const [tasks, setTasks] = useState(storedTasks.tasks);
+  const [completedTasks, setCompletedText] = useState(storedTasks.completedTasks);
+
+  useEffect( () => { // runs every re-render
+    storeTasks({ tasks, completedTasks })
+  })
 
   const updateTaskText = ev => {
     setTaskText(ev.target.value);
@@ -21,7 +40,9 @@ export default function Tasks() {
   };
 
   const removeTask = completedTask => {
-    setCompletedText(completedTasks.filter(task => task.id !== completedTask.id));
+    setCompletedText(
+      completedTasks.filter(task => task.id !== completedTask.id)
+    );
   };
 
   const PendingTasks = () =>
@@ -34,8 +55,7 @@ export default function Tasks() {
   const CompletedTasks = () =>
     completedTasks.map(task => (
       <div key={task.id}>
-        {task.taskText}{' '}
-        <span onClick={() => removeTask(task)}>x</span>
+        {task.taskText} <span onClick={() => removeTask(task)}>x</span>
       </div>
     ));
 
