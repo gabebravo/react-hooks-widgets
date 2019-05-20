@@ -6,11 +6,16 @@ function Gallery(){
 
 // ONLY QUEUE UP ONCE
   useEffect( () => {
-    setInterval( () => {
+    const interval = setInterval( () => {
       setIndex( storedIndex => { // storedIndex = latest state value / not original defined version >> because original value only gets set on initital load
         return (storedIndex + 1) % PICTURES.length
       })
     }, 4000)
+
+    // CLEANUP FUNCTION - will run right after every re-render (in this case, only on unmount)
+    return () => {
+      clearInterval(interval) // native JS function for interval
+    }
   }, [])
 
   return (
