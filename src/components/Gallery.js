@@ -7,8 +7,9 @@ function Gallery(){
 // ONLY QUEUE UP ONCE
   useEffect( () => {
     setInterval( () => {
-      const newIndex = Math.floor(Math.random() * (PICTURES.length));
-      setIndex(newIndex)
+      setIndex( storedIndex => { // storedIndex = latest state value >> because the value only gets set on initital load
+        return (storedIndex + 1) % PICTURES.length
+      })
     }, 4000)
   }, [])
 
