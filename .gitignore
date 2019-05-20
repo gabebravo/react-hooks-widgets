@@ -12,8 +12,8 @@
 /build
 
 # assets
-/assets
-/data
+assets
+data
 
 # misc
 .DS_Store
