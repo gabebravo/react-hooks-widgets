@@ -11,3 +11,23 @@ export function useFetch(url, initialValue) {
 
   return result;
 }
+
+export function useDynamicTransition({ increment, delay, length }){
+  const [index, setIndex] = useState(0);
+
+// ONLY QUEUE UP ONCE
+  useEffect( () => {
+    const interval = setInterval( () => {
+      setIndex( storedIndex => { // storedIndex = latest state value / not original defined version >> because original value only gets set on initital load
+        return (storedIndex + increment) % length
+      })
+    }, delay)
+
+    // CLEANUP FUNCTION - will run right after every re-render
+    return () => {
+      clearInterval(interval) // native JS function for interval
+    }
+  }, [delay, increment])
+
+  return index
+}

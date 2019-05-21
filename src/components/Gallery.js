@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PICTURES from '../data/pictures'
+import { useDynamicTransition } from '../customHooks'
 
 const SECONDS = 1000;
 const MIN_DELAY = 1 * SECONDS
 const MIN_INC = 1
 
 function Gallery(){
-  const [index, setIndex] = useState(0);
   const [delay, setDelay] = useState(3 * SECONDS);
   const [increment, setIncrement] = useState(1);
 
-// ONLY QUEUE UP ONCE
-  useEffect( () => {
-    const interval = setInterval( () => {
-      setIndex( storedIndex => { // storedIndex = latest state value / not original defined version >> because original value only gets set on initital load
-        return (storedIndex + increment) % PICTURES.length
-      })
-    }, delay)
-
-    // CLEANUP FUNCTION - will run right after every re-render
-    return () => {
-      clearInterval(interval) // native JS function for interval
-    }
-  }, [delay, increment])
+  const index = useDynamicTransition({ increment, delay, length: PICTURES.length })
 
 // on the change event, sets delay >> triggers use effect to set interval >> also cleanup function runs
   const updateDelay = ev => {
