@@ -1,5 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 const shortid = require("shortid");
+
+const DEFAULT_STATE = {
+  tasks: [],
+  completedTasks: []
+}
+
+const TYPES = {
+  ADD: 'ADD',
+  COMPLETE: 'COMPLETE',
+  DELETE: 'DELETE'
+}
+
+// state = state already there, action is the actual payload
+const taskReducer = (state, action) => {
+  switch(action.type){
+    case 'ADD':
+      return {
+        ...state,
+        tasks: [ ...state.tasks, action.task ]
+      }
+    case 'COMPLETE':
+      const { completedTask } = action;
+      return {
+        ...state,
+        completedTasks: [ ...state.completedTasks, completedTask ],
+        tasks: state.tasks.filter(task => task.id !== completedTask.id)
+      }
+    case 'DELETE':
+      return {
+        ...state,
+        completedTasks: state.completedTasks.filter(ct => ct.id !== action.completedTask.id)
+      }
+    default: 
+      return state;
+  }
+}
 
 const TASK_STORAGE_KEY = "TASK_STORAGE_KEY";
 
@@ -12,14 +48,16 @@ const storeTasks = (taskMap) => {
 
 const readStoreTasks = () => {
   const taskMap = JSON.parse(localStorage.getItem("TASK_STORAGE_KEY"));
-  return taskMap ? taskMap : { tasks: [], completedTasks: [] }
+  return taskMap ? taskMap : DEFAULT_STATE
 };
 
 export default function Tasks() {
   const [taskText, setTaskText] = useState("");
   const storedTasks = readStoreTasks();
-  const [tasks, setTasks] = useState(storedTasks.tasks);
-  const [completedTasks, setCompletedText] = useState(storedTasks.completedTasks);
+
+  // takes a reducer and initial state as args
+  const [state, dispatch] = useReducer(taskReducer, storedTasks);
+  const { tasks, completedTasks } = state;
 
   useEffect( () => { // runs every re-render
     storeTasks({ tasks, completedTasks })
@@ -30,19 +68,17 @@ export default function Tasks() {
   };
 
   const addTask = () => {
-    setTasks([...tasks, { taskText, id: shortid.generate() }]);
+    const ID = shortid.generate()
+    dispatch({ type: TYPES.ADD, task: { taskText, id: ID } })
     setTaskText("");
   };
 
   const completeTask = completedTask => {
-    setCompletedText([...completedTasks, completedTask]);
-    setTasks(tasks.filter(task => task.id !== completedTask.id));
+    dispatch({ type: TYPES.COMPLETE, completedTask })
   };
 
   const removeTask = completedTask => {
-    setCompletedText(
-      completedTasks.filter(task => task.id !== completedTask.id)
-    );
+    dispatch({ type: TYPES.DELETE, completedTask })
   };
 
   const PendingTasks = () =>
